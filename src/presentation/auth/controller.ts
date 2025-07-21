@@ -1,21 +1,45 @@
 import { Request, Response } from "express";
+import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
+import { AuthService } from "../services/auth.service";
 
 export class AuthController {
   //* DI
-  constructor() {}
+  constructor(public readonly authService: AuthService) {}
 
-  public async loginUser(req: Request, res: Response) {
-    // Implement login logic here
-    res.json("Login endpoint");
-  }
-  public async registerUser(req: Request, res: Response) {
-    // Implement registration logic here
-    res.json("Registration endpoint");
-  }
+  private handleError = (error: unknown, res: Response) => {
+    if (error instanceof CustomError) {
+      res.status(error.statusCode).json({ error: error.message });
+      return;
+    }
+    res.status(500).json({ error: "Internal server error" });
+  };
 
-  public async validateEmail(req: Request, res: Response) {
+  public registerUser = (req: Request, res: Response) => {
+    const [error, registerUserDto] = RegisterUserDto.create(req.body);
+    if (error) {
+      res.status(400).json({ error });
+      return;
+    }
+    this.authService
+      .registerUser(registerUserDto!)
+      .then((user) => res.json(user))
+      .catch((error) => this.handleError(error, res));
+  };
+
+  public loginUser = (req: Request, res: Response) => {
+    const [error, loginUserDto] = LoginUserDto.create(req.body);
+    if (error) {
+      res.status(400).json({ error });
+      return;
+    }
+    this.authService
+      .loginUser(loginUserDto!)
+      .then((user) => res.json(user))
+      .catch((error) => this.handleError(error, res));
+  };
+  public validateEmail = (req: Request, res: Response) => {
     // Implement email validation logic here
 
     res.json(`Email validation endpoint with token:`);
-  }
+  };
 }
