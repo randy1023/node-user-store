@@ -6,4 +6,5 @@ export const envs = {
   PUBLIC_PATH: env.get("PUBLIC_PATH").default("public").asString(),
   MONGO_URL: env.get("MONGO_URL").required().asString(),
   MONGO_DB_NAME: env.get("MONGO_DB_NAME").required().asString(),
+  JWT_SEED: env.get("JWT_SEED").required().asString(),
 };

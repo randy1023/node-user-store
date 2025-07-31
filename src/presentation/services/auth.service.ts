@@ -1,4 +1,4 @@
-import { bcryptAdapter } from "../../config";
+import { bcryptAdapter, JwtAdapter } from "../../config";
 import { UserModel } from "../../data";
 import {
   CustomError,
@@ -48,9 +48,17 @@ export class AuthService {
       );
       if (!isPasswordValid) throw CustomError.badRequest("Invalid password");
       const { password, ...restData } = UserEntity.fromObject(existUser);
+      const payload = {
+        id: existUser.id,
+      };
+      const token = await JwtAdapter.generateToken(payload);
+
+      if (!token)
+        throw CustomError.internalServerError("Error while creating JWT");
+
       return {
         user: restData,
-        token: "ABC", // Aquí deberías generar un token JWT real
+        token, // Aquí deberías generar un token JWT real
       };
     } catch (error) {
       throw CustomError.internalServerError(`${error}`);
