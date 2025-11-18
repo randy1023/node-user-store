@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
-import { AuthService } from "../services";
+import { Request, Response } from 'express'
+import { CustomError, LoginUserDto, RegisterUserDto } from '../../domain'
+import { AuthService } from '../services'
 
 export class AuthController {
   //* DI
@@ -8,38 +8,41 @@ export class AuthController {
 
   private handleError = (error: unknown, res: Response) => {
     if (error instanceof CustomError) {
-      res.status(error.statusCode).json({ error: error.message });
-      return;
+      res.status(error.statusCode).json({ error: error.message })
+      return
     }
-    res.status(500).json({ error: "Internal server error" });
-  };
+    res.status(500).json({ error: 'Internal server error' })
+  }
 
   public registerUser = (req: Request, res: Response) => {
-    const [error, registerUserDto] = RegisterUserDto.create(req.body);
+    const [error, registerUserDto] = RegisterUserDto.create(req.body)
     if (error) {
-      res.status(400).json({ error });
-      return;
+      res.status(400).json({ error })
+      return
     }
     this.authService
       .registerUser(registerUserDto!)
       .then((user) => res.json(user))
-      .catch((error) => this.handleError(error, res));
-  };
+      .catch((error) => this.handleError(error, res))
+  }
 
   public loginUser = (req: Request, res: Response) => {
-    const [error, loginUserDto] = LoginUserDto.create(req.body);
+    const [error, loginUserDto] = LoginUserDto.create(req.body)
     if (error) {
-      res.status(400).json({ error });
-      return;
+      res.status(400).json({ error })
+      return
     }
     this.authService
       .loginUser(loginUserDto!)
       .then((user) => res.json(user))
-      .catch((error) => this.handleError(error, res));
-  };
+      .catch((error) => this.handleError(error, res))
+  }
   public validateEmail = (req: Request, res: Response) => {
     // Implement email validation logic here
-
-    res.json(`Email validation endpoint with token:`);
-  };
+    const { token } = req.params
+    this.authService
+      .validateEmailToken(token)
+      .then(() => res.json({ message: 'Email validated successfully' }))
+      .catch((error) => this.handleError(error, res))
+  }
 }

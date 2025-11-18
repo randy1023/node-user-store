@@ -1,4 +1,4 @@
-import { CustomError } from "../errors/custom.error";
+import { CustomError } from '../errors/custom.error'
 
 export class UserEntity {
   constructor(
@@ -11,17 +11,28 @@ export class UserEntity {
     public readonly img?: string
   ) {}
 
-  static fromObject(object: { [key: string]: any }): UserEntity {
-    const { id, _id, name, email, emailValidated, password, role, img } =
-      object;
+  get values() {
+    const returnObj: { [key: string]: any } = {}
+    if (this.id) returnObj.id = this.id
+    if (this.name) returnObj.name = this.name
+    if (this.email) returnObj.email = this.email
+    if (this.emailValidated) returnObj.emailValidated = this.emailValidated
+    if (this.role) returnObj.role = this.role
+    if (this.img) returnObj.img = this.img
 
-    if (!id && !_id) throw CustomError.badRequest("Missing Id");
-    if (!name) throw CustomError.badRequest("Missing Name");
-    if (!email) throw CustomError.badRequest("Missing Email");
-    if (!password) throw CustomError.badRequest("Missing Password");
+    return returnObj
+  }
+
+  static fromObject(object: { [key: string]: any }): UserEntity {
+    const { id, _id, name, email, emailValidated, password, role, img } = object
+
+    if (!id && !_id) throw CustomError.badRequest('Missing Id')
+    if (!name) throw CustomError.badRequest('Missing Name')
+    if (!email) throw CustomError.badRequest('Missing Email')
+    if (!password) throw CustomError.badRequest('Missing Password')
     if (emailValidated === undefined)
-      throw CustomError.badRequest("Missing Email Validation Status");
-    if (!role) throw CustomError.badRequest("Missing Role");
+      throw CustomError.badRequest('Missing Email Validation Status')
+    if (!role) throw CustomError.badRequest('Missing Role')
 
     return new UserEntity(
       id || _id,
@@ -31,6 +42,6 @@ export class UserEntity {
       password,
       Array.isArray(role) ? role : [role],
       img
-    );
+    )
   }
 }

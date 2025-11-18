@@ -1,6 +1,6 @@
 # node-user-store (Rest Project + TypeScript)
 
-Este proyecto va a funcion fuertemente con autenticacion usando JWT y todas sus funcionalidades como encriptar contraseñas, semillas, etc y todo estos desde nuestro servidor de node parra que puede ser implementado en cualquier app en el modulo de login.
+Este proyecto va a funcion fuertemente con autenticacion usando JWT y todas sus funcionalidades como encriptar contraseñas, semillas, etc y todo estos desde nuestro servidor de node para que puede ser implementado en cualquier app en el modulo de login.
 
 ## Instalacion
 
