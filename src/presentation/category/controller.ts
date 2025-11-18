@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CustomError } from '../../domain'
+import { CreateCategoryDto, CustomError } from '../../domain'
 
 export class CategoryController {
   //* DI
@@ -18,6 +18,12 @@ export class CategoryController {
   }
 
   public createCategories = (req: Request, res: Response) => {
-    res.json({ message: 'Create category endpoint' })
+    const [error, createCategoryDto] = CreateCategoryDto.create(req.body)
+    if (error) {
+      res.status(400).json({ error })
+      return
+    }
+
+    res.json({ category: createCategoryDto })
   }
 }
