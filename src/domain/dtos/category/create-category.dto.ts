@@ -9,7 +9,7 @@ export class CreateCategoryDto {
   static create(object: { [key: string]: any }): [string?, CreateCategoryDto?] {
     const { name, available = false } = object
     let availableBool: boolean = available
-    console.log(typeof available, available)
+
     if (!name) return ['Missing Name', undefined]
     if (typeof available === 'string') {
       if (available.toLowerCase() === 'true') {
@@ -20,7 +20,8 @@ export class CreateCategoryDto {
         return ['Available must be a boolean', undefined]
       }
     }
+    const lowesName = name.toLowerCase()
 
-    return [undefined, new CreateCategoryDto(name, availableBool)]
+    return [undefined, new CreateCategoryDto(lowesName, availableBool)]
   }
 }

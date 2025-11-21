@@ -33,6 +33,10 @@ export class AuthMiddleware {
         res.status(401).json({ error: 'User not found' })
         return
       }
+      //INICIALIZAR req.body SI ES UNDEFINED porque al usar el formato form-data puede venir undefined y da un error al asignar user
+      if (!req.body) {
+        req.body = {}
+      }
       // TODO: validar si el usuario esta activo
       const userEntity = UserEntity.fromObject(user)
       req.body.user = userEntity.values
